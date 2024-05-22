@@ -2,4 +2,8 @@ archive.zip
 trafic_sign_dataset
 .idea
 processed
-models
+.python-version
+models/**/[0-9]*/
+!models/**/last
+__pycache__
+models/**/**/model.pt

@@ -7,11 +7,10 @@ from PIL import Image
 
 transform = v2.Compose([
     v2.ToPILImage(),
-    v2.Resize((256, 256)),  # lub (200, 200) w zależności od wyboru
+    v2.Resize((224, 224)),
     v2.PILToTensor(),
     v2.Lambda(lambda x: x[:3, :, :] if x.shape[0] == 4 else x),
-    v2.ConvertImageDtype(torch.float32),
-    v2.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+    v2.ConvertImageDtype(torch.float32)
 ])
 
 
