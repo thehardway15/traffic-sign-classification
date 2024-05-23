@@ -380,4 +380,4 @@ Skuteczność na zbiorze testowym: 94.34%
 ![missclassification](models/v6/missclassified.png)
 
 Z błędów wynika, że model poprawnie sklasyfikował znaki ograniczenia prędkości, miał jednak problem z dopasowaniem cyfry na znakach.
-Znaki o nakazie prędkości zostły pomylone ze znakami zawierającymi numery dróg. Znaki pod dużym kątem zostały pomylone ze znakami zawierającymi nazwę miejscowości, prawdopodobnie pod dużym kontem ciężko jest modelowi dopasować kształt.
+Znaki o nakazie prędkości zostły pomylone ze znakami zawierającymi numery dróg. Znaki pod dużym kątem zostały pomylone ze znakami zawierającymi nazwę miejscowości, prawdopodobnie pod dużym kątem ciężko jest modelowi dopasować kształt.
