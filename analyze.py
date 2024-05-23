@@ -22,7 +22,7 @@ transform = v2.Compose([
     v2.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),
 ])
 
-test_dataset = TestDataset(test_label_csv, test_dir, None, transform, target_transform, device=device)
+test_dataset = TestDataset(test_label_csv, test_dir, 20, transform, target_transform, device=device)
 test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False)
 
 
