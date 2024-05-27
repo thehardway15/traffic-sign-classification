@@ -8,7 +8,7 @@ plt.ion()
 
 
 def train_loop(model, train_loader, valid_loader, test_loader, optimizer, criterion, epochs, device, path, save=False,
-               scheduler=None, smart=True):
+               scheduler=None, smart=True, threshold=0.0001):
     stats = Stats(learning_rate=optimizer.param_groups[0]['lr'], epochs=epochs,
                   optimizer_name=optimizer.__class__.__name__, criterion_name=criterion.__class__.__name__)
     fig, ax = stats.live_plot()
@@ -19,7 +19,7 @@ def train_loop(model, train_loader, valid_loader, test_loader, optimizer, criter
     epoch_without_changes = 0
     last_train_loss = 10
     early_stopping_after = 0
-    early_stopping_loss_threshold = 0.0001
+    early_stopping_loss_threshold = threshold
 
     for epoch in range(1, epochs + 1):
         early_stopping_after += 1
@@ -39,7 +39,7 @@ def train_loop(model, train_loader, valid_loader, test_loader, optimizer, criter
 
         before_lr = optimizer.param_groups[0]['lr']
         if scheduler is not None:
-            if smart and epoch_without_changes > 5:
+            if smart and epoch_without_changes > 1:
                 scheduler.step()
             if not smart:
                 scheduler.step()
@@ -56,7 +56,7 @@ def train_loop(model, train_loader, valid_loader, test_loader, optimizer, criter
 
         stats.update_plot(fig, ax)
 
-        if smart and epoch_without_changes > 10:
+        if smart and epoch_without_changes > 2:
             break
 
     print("Evaluating model on test set...")

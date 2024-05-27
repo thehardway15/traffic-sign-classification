@@ -60,11 +60,19 @@ val_loader = DataLoader(val_dataset, batch_size=64, shuffle=False)
 # print(f"Liczba rekordów w zbiorze walidacyjnym: {len(val_dataset)}")
 # print(f"Liczba rekordów w zbiorze testowym: {len(test_dataset)}")
 
+dataset_remap = TrainDataset(train_dir, 11000, transform, target_transform, device=device, remap_label=True, excludes=['6'])
+train_dataset_remap, val_dataset_remap = random_split(dataset_remap, [0.8, 0.2])
+test_dataset_remap = TestDataset(test_label_csv, test_dir, 6000, transform, target_transform, device=device, remap_label=True, excludes=['6'])
+
+train_loader_remap = DataLoader(train_dataset_remap, batch_size=64, shuffle=True)
+test_loader_remap = DataLoader(test_dataset_remap, batch_size=64, shuffle=False)
+val_loader_remap = DataLoader(val_dataset_remap, batch_size=64, shuffle=False)
+
 
 if __name__ == "__main__":
     mp.set_start_method('spawn', force=True)
 
-    net = CnnNetV5()
+    net = CnnNetV5(num_classes=6)
     criterion = nn.CrossEntropyLoss()
     learning_rate = 0.001
     # optimizer = optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9)
@@ -73,4 +81,4 @@ if __name__ == "__main__":
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
 
-    train_loop(net, train_loader, val_loader, test_loader, optimizer, criterion, 200, device, "models/v6", True, scheduler, True)
+    train_loop(net, train_loader_remap, val_loader_remap, test_loader_remap, optimizer, criterion, 200, device, "models/v7", True, scheduler, True, 0.01)

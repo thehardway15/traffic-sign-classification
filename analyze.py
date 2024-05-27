@@ -22,7 +22,8 @@ transform = v2.Compose([
     v2.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),
 ])
 
-test_dataset = TestDataset(test_label_csv, test_dir, 20, transform, target_transform, device=device)
+# test_dataset = TestDataset(test_label_csv, test_dir, 20, transform, target_transform, device=device)
+test_dataset = TestDataset(test_label_csv, test_dir, 6000, transform, target_transform, device=device, remap_label=True, excludes=['6'])
 test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False)
 
 
@@ -31,8 +32,8 @@ def unnormalize(tensor):
     return tensor
 
 
-def analyze(klass, version):
-    model = klass()
+def analyze(klass, version, num_classes=205):
+    model = klass(num_classes=num_classes)
     model.load_state_dict(torch.load(f'./models/{version}/last/model.pt', map_location='cpu'))
     model.eval()
     model.to(device)
@@ -85,9 +86,10 @@ def analyze(klass, version):
     plt.close()
 
 if __name__ == '__main__':
-    analyze(CnnNetV5, 'v6')
-    analyze(CnnNetV5, 'v5')
-    analyze(CnnNetV4, 'v4')
-    analyze(CnnNetV3, 'v3')
-    analyze(CnnNetV2, 'v2')
-    analyze(CnnNet, 'v1')
+    analyze(CnnNetV5, 'v7', 6)
+    # analyze(CnnNetV5, 'v6')
+    # analyze(CnnNetV5, 'v5')
+    # analyze(CnnNetV4, 'v4')
+    # analyze(CnnNetV3, 'v3')
+    # analyze(CnnNetV2, 'v2')
+    # analyze(CnnNet, 'v1')

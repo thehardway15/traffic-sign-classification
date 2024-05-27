@@ -381,3 +381,84 @@ Skuteczność na zbiorze testowym: 94.34%
 
 Z błędów wynika, że model poprawnie sklasyfikował znaki ograniczenia prędkości, miał jednak problem z dopasowaniem cyfry na znakach.
 Znaki o nakazie prędkości zostły pomylone ze znakami zawierającymi numery dróg. Znaki pod dużym kątem zostały pomylone ze znakami zawierającymi nazwę miejscowości, prawdopodobnie pod dużym kontem ciężko jest modelowi dopasować kształt.
+
+# Zmeniejszenie ilości klas
+
+Ze względu na małą ilość próbek w każdej klasie po zbalansowaniu, zdecydowaliśmy zmniejszyć ilość klas przez połączenie ich w kategorie.
+
+0 : prohibition
+
+1 : warning
+
+2 : information
+
+3 : mandatory
+
+4 : supplements
+
+5 : cities
+
+## Dane treningowe
+
+Zestaw zawiera 96 619 obrazów, podzielonych na 6 klas.
+
+![Rozkład klas](analyze/train_dataset_count_after_remap.png)
+
+Jak widać na rozkładzie zestaw nie jest zbalansowany.
+
+Maksymalna ilosść obrazów w klasie to: 28 421
+Minimalna ilosść obrazów w klasie to: 7 454
+Klasa z najwieksza iloscia obrazow to: 0
+Klasa z najmniejsza iloscia obrazow to: 5
+
+Do treningu wyciągnięte zostało losowo 11 000 obrazów z każdej klasy.
+
+## Dane testowe
+
+Zestaw zawiera 52 698 obrazów, podzielonych na 6 klas.
+
+![Rozkład klas](analyze/test_dataset_count_after_remap.png)
+
+Jak widać na rozkładzie zestaw nie jest zbalansowany.
+
+Maksymalna ilosść obrazów w klasie to: 14 862
+Minimalna ilosść obrazów w klasie to: 2 520
+Klasa z najwieksza iloscia obrazow to: 2
+Klasa z najmniejsza iloscia obrazow to: 5
+
+Do testowania wyciągnięte zostało losowo 6 000 obrazów każdej klasy.
+
+## V7
+class = CnnNetV5
+
+### Architektura:
+
+Model uczył się bardzo szybko, więc zmienione zostały wartości early stopping aby szybciej kończył. Threshold zmieiony z 0.0001 na 0.001,
+dodatkowo zmiana learning rate następowała już po 2 epokach a po 3 nauka została przerywana.
+
+### Parametry:
+
+| Parametr | Wartość          |
+|:--------|:-----------------|
+| lr       | 0.001 - 0.0007   |
+| epochs   | 14               |
+| batch_size | 64               |
+| optimizer | Adam             |
+| loss | CrossEntropyLoss |
+
+### Wynik:
+
+![Loss](models/v7/training_progress.png)
+
+Czas treningu: około 30 minut
+
+Skuteczność na zbiorze treningowym: 99.61%
+
+Skuteczność na zbiorze walidacyjnym: 99.54%
+
+Skuteczność na zbiorze testowym: 89.29%
+
+![Confusion matrix](models/v7/cm.png)
+![missclassification](models/v7/missclassified.png)
+
+Pomyłki głowne między klasami 0 i 4. Prawdopodobnie przez dużą ilość białej przestrzeni występującej na znakach.
